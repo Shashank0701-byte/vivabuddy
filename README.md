@@ -22,6 +22,10 @@ Document-grounded questions are the core of VivaBuddy, so the model should be so
 
 For the Hacktoberfest **Build for a Friend** submission, the useful story is the real problem, the friend's resume-based test and feedback, and why local, replaceable AI makes this practice experience more accessible and under the student's control. Saving an agent session with DevRelay is optional; it can be linked or embedded as extra process evidence, but it is not required to use or deploy VivaBuddy.
 
+### Model choices
+
+During development, I used **Qwen2.5-Coder 7B** with local Ollama for coding, debugging, and iteration. It let me work with a model on my own machine. For deployed practice sessions, I chose **Gemma 4 31B** because its general reasoning capabilities are a better fit for creating questions from a student's notes or resume. Using Ollama for both keeps model selection configurable, so the app can use a local model during development and a hosted model for production without tying its integration to one model provider.
+
 ## Run locally
 
 You need [Node.js 20.9+](https://nodejs.org/) and [Ollama](https://ollama.com/download).
@@ -52,7 +56,7 @@ Vercel can host the Next.js app while Ollama Cloud handles model inference. In y
 | Variable | Value |
 | --- | --- |
 | `OLLAMA_HOST` | `https://ollama.com` |
-| `OLLAMA_MODEL` | A model tag available to your Ollama Cloud account, such as `gemma4:31b` if it is listed for your account |
+| `OLLAMA_MODEL` | A model tag available to your Ollama Cloud account, such as `gemma4:31b-cloud` if it is listed for your account |
 | `OLLAMA_API_KEY` | A key created in [Ollama settings](https://ollama.com/settings/keys) |
 
 Use a model available to your Ollama Cloud account; the local default `qwen2.5-coder:7b` may not be available there. Add the variables to the environments you plan to deploy to, then redeploy. Do not use `localhost` as the host on Vercel.
