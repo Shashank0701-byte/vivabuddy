@@ -2,7 +2,7 @@
 
 **Practice explaining what you know before the real conversation.** VivaBuddy turns a study PDF or resume into an interactive practice session, asks follow-up questions grounded in that material, and gives you a final report with feedback.
 
-VivaBuddy was built for a friend who wanted a better way to prepare for viva and interview questions. It is an MVP, focused on one uploaded document and one practice session at a time.
+VivaBuddy was built for a friends who wanted a better way to prepare for viva and interview questions. It is an MVP, focused on one uploaded document and one practice session at a time.
 
 ## What it does
 
