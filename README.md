@@ -1,6 +1,6 @@
 # VivaBuddy
 
-Practice a university viva with a self-hosted AI examiner. Upload a study PDF, choose a subject and difficulty, answer five questions, and get adaptive follow-ups plus a final report.
+Practice a university viva with an Ollama-powered AI examiner. Upload a study PDF, choose a subject and difficulty, answer five questions, and get adaptive follow-ups plus a final report.
 
 VivaBuddy is being built for the Hacktoberfest **Build for a Friend** challenge. The goal is to solve a real classmate's viva-preparation problem and include their feedback in the submission.
 
@@ -21,6 +21,22 @@ Open <http://localhost:3000> and keep Ollama running. By default, the app connec
 VivaBuddy needs a persistent Node.js server and a reachable Ollama service. A static export cannot run its APIs, and serverless hosting is a poor fit for model inference: calls can take a while and the model needs persistent compute and storage. The included Compose setup runs the Next.js app, Ollama, and Caddy on one Docker host. Ollama is only reachable inside the Compose network; Caddy provides HTTPS, a 14 MB request-body limit, and password protection for the whole app.
 
 The default Qwen2.5-Coder 7B model download is about 4.7 GB. That is just the model artifact size; inference also needs memory, and CPU-only hosts may respond slowly. Choose a server with enough RAM or compatible GPU resources for Ollama. [Ollama model details](https://ollama.com/library/qwen2.5-coder).
+
+## Deploy the app on Vercel
+
+Vercel hosts the Next.js app, while inference runs through Ollama. You can use Ollama's hosted Cloud API or run Ollama on a separate machine. Do not point `OLLAMA_HOST` at `localhost` or expose an unauthenticated Ollama port to the public internet.
+
+In Vercel Project Settings → Environment Variables, set:
+
+| Variable | Value |
+| --- | --- |
+| `OLLAMA_HOST` | `https://ollama.com` for Ollama Cloud, or the base URL of your protected Ollama reverse proxy (no `/api` suffix) |
+| `OLLAMA_MODEL` | Exact model tag available to that API. For Ollama Cloud, choose one returned by its model list; the local default `qwen2.5-coder:7b` may not be available there. |
+| `OLLAMA_API_KEY` | Ollama Cloud key from [ollama.com/settings/keys](https://ollama.com/settings/keys), or the Bearer token expected by your protected proxy |
+
+Redeploy after setting the variables. Vercel Functions have a 4.5 MB request-body limit, so this app caps PDFs at 4 MB to leave room for multipart overhead. Use text-based PDFs under that size. [Vercel Function limits](https://vercel.com/docs/functions/limitations)
+
+PDFs and extracted text pass through Vercel Functions, and extracted text and answers are sent to the configured Ollama service. With Ollama Cloud, inference happens on Ollama's service, not on the student's device. AI calls can time out if Ollama is slow or unreachable; Vercel documents a 120-second proxied request timeout. [Vercel limits](https://vercel.com/docs/limits)
 
 ### One-time setup
 
@@ -65,7 +81,7 @@ docker compose down
 - The PDF is uploaded to the VivaBuddy server for text extraction. Extracted text is sent to the configured Ollama service for question generation, answer evaluation, and the report.
 - In the supplied Compose deployment, Ollama runs on the same server and is not published as a public port. The server operator can access uploaded material during processing; this is not private inference on the student's device.
 - The app does not save sessions to a database. Session material and answers are held in the current browser tab's session storage and sent to the server for each AI request. Closing the tab clears that browser session.
-- The MVP accepts one text-based PDF up to 12 MB and sends up to 80,000 extracted characters to the model. Scanned image PDFs are not supported.
+- The MVP accepts one text-based PDF up to 4 MB and sends up to 80,000 extracted characters to the model. Scanned image PDFs are not supported.
 - The included Caddy setup protects the public app with one shared Basic Auth credential. Share that password only with the intended friend. This is a demo access gate, not per-user authentication or a multi-user security system.
 
 ## API
