@@ -1,16 +1,26 @@
 # VivaBuddy
 
-**Practice your university viva before the real one.** VivaBuddy turns a study PDF into an interactive oral exam, asks follow-up questions based on your answers, and gives you a final report with feedback.
+**Practice explaining what you know before the real conversation.** VivaBuddy turns a study PDF or resume into an interactive practice session, asks follow-up questions grounded in that material, and gives you a final report with feedback.
 
-VivaBuddy is a Hacktoberfest **Build for a Friend** project: a practical study tool for students who want a low-pressure way to prepare for viva exams. It is an MVP, so the experience is focused on one document and one practice session at a time.
+VivaBuddy was built for a friend who wanted a better way to prepare for viva and interview questions. It is an MVP, focused on one uploaded document and one practice session at a time.
 
 ## What it does
 
-- Upload a text-based PDF and choose a subject and difficulty.
-- Practice a five-question viva grounded in the uploaded material.
+- Upload a text-based PDF, such as study notes or a resume, and choose a subject and difficulty.
+- Practice a five-question session grounded in the uploaded material.
 - Get adaptive follow-up questions as you answer.
 - Review a final report with feedback on your answers.
 - Run inference with a local Ollama model or a configured Ollama service.
+
+## Built for a friend
+
+A friend tested VivaBuddy with his resume. He liked that the questions came from the PDF he uploaded and asked about specific projects, including what his role had been on a particular project. That feedback confirmed the value of grounding practice questions in the person's own material instead of asking only generic questions.
+
+## Why open-source AI matters here
+
+Document-grounded questions are the core of VivaBuddy, so the model should be something people can run and change for themselves. VivaBuddy uses Ollama with an open-weight model by default. When the app and Ollama both run locally, a student can practice with their notes or resume without sending them to a hosted AI provider. They can choose another compatible model or host as their needs change. Hosted deployments are also supported, but their data-handling and privacy depend on the selected app host and model service.
+
+For the Hacktoberfest **Build for a Friend** submission, the useful story is the real problem, the friend's resume-based test and feedback, and why local, replaceable AI makes this practice experience more accessible and under the student's control. Saving an agent session with DevRelay is optional; it can be linked or embedded as extra process evidence, but it is not required to use or deploy VivaBuddy.
 
 ## Run locally
 
@@ -106,7 +116,7 @@ docker compose down
 
 ## Project status
 
-The core practice flow, PDF upload, adaptive questions, evaluation report, local Ollama support, and deployment configuration are implemented. VivaBuddy is an early MVP; the friend-specific feedback and demo story can be added as they are collected.
+The core practice flow, PDF upload, adaptive questions, evaluation report, local Ollama support, and deployment configuration are implemented. A friend has tried the app with his resume and confirmed that document-specific project questions are useful. VivaBuddy remains an early MVP, focused on one document per session.
 
 ## Out of scope for this MVP
 
