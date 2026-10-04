@@ -1,0 +1,11 @@
+{$DOMAIN} {
+	route {
+		basic_auth {
+			{$BASIC_AUTH_USER} REPLACE_WITH_BCRYPT_HASH
+		}
+		request_body {
+			max_size 14MB
+		}
+		reverse_proxy app:3000
+	}
+}
